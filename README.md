@@ -1,6 +1,6 @@
 ## Description
 
-Бэкенд проект на [Nest.js](https://github.com/nestjs/nest) + Postgres, который позволяет пользователям регистрироваться, авторизовываться и просматривать список пользователей.
+Бэкенд проект на [Nest.js](https://github.com/nestjs/nest) + [Postgres](https://www.postgresql.org/), который позволяет пользователям регистрироваться, авторизовываться и просматривать список пользователей.
 
 ## Project setup and start (Docker)
 
