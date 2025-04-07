@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "esnext",
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "@app.configs": ["src/app/config"],
+      "@modules": ["src/modules/index"],
+      "@models": ["src/models/index"],
+      "@utils": ["src/utils/index"],
+      "@app": ["src/app/index"],
+    },
+  }
+}
