@@ -3,7 +3,6 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { Module, Controller, Get } from '@nestjs/common';
 
-// Создаем упрощенный контроллер для тестирования
 @Controller()
 class TestController {
   @Get()
@@ -12,7 +11,6 @@ class TestController {
   }
 }
 
-// Создаем упрощенный модуль для тестирования
 @Module({
   controllers: [TestController],
 })
