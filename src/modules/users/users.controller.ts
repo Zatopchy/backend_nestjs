@@ -1,5 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UserModel } from '@models';
 import { AuthGuard } from '../auth/guards';
 import { UsersService } from './users.service';
 
@@ -11,9 +12,9 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth('token')
   @ApiOperation({ summary: 'Получение списка всех пользователей' })
-  @ApiResponse({ status: 200, description: 'Список пользователей успешно получен' })
+  @ApiResponse({ status: 200, description: 'Список пользователей', type: UserModel, isArray: true })
   @ApiResponse({ status: 401, description: 'Неавторизованный запрос' })
-  async findAll() {
+  async findAll(): Promise<UserModel[]> {
     return this.usersService.findAll();
   }
 }
