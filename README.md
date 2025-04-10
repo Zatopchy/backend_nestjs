@@ -26,7 +26,7 @@ $ docker-compose up -d
 
 По умолчанию путь: http://localhost:3000/docs/swagger/
 
-## Run tests (Local)
+## Run tests
 
 ```bash
 # unit tests
