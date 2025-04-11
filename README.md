@@ -18,9 +18,6 @@ cp .env.example .env
 
 # Собрать и запустить контейнеры
 $ docker-compose up --build
-
-# Для запуска в фоновом режиме
-$ docker-compose up -d
 ```
 
 ## Swagger
