@@ -13,6 +13,9 @@ $ git clone https://github.com/Zatopchy/backend_nestjs.git
 # Перейти в директорию проекта
 $ cd backend_nestjs
 
+# Создать файл .env и указать переменные окружения (пример .env.example)
+cp .env.example .env
+
 # Собрать и запустить контейнеры
 $ docker-compose up --build
 
