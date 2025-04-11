@@ -7,6 +7,7 @@ import { SignIn, SignUp } from "./dto"
 import { LocalAuthGuard } from "./guards"
 import { AuthService } from "./auth.service"
 import { AuthUser } from "./user.decorator"
+import { User } from "../users/dto"
 
 @Controller("auth")
 export class AuthController {
@@ -14,12 +15,12 @@ export class AuthController {
         private readonly authService: AuthService,
     ) { }
 
-    @Post("register")
+    @Post("signup")
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: "Регистрация пользователя" })
-    @ApiResponse({ status: 201, description: "Пользователь успешно создан", type: UserModel })
-    async register(@Body() signUp: SignUp, @Res() res: Response): Promise<Response> {
-        const user = await this.authService.register(signUp)
+    @ApiResponse({ status: 201, description: "Пользователь успешно создан", type: User })
+    async signUp(@Body() signUp: SignUp, @Res() res: Response): Promise<Response<User>> {
+        const user = await this.authService.signUp(signUp)
         const token = this.authService.signToken(user)
 
         res.setHeader("Authorization", `Bearer ${token}`)
@@ -35,13 +36,13 @@ export class AuthController {
         return res
     }
 
-    @Post("login")
+    @Post("signin")
     @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: "Авторизация пользователя" })
-    @ApiResponse({ status: 200, description: "Успешная авторизация", type: UserModel })
+    @ApiResponse({ status: 200, description: "Успешная авторизация", type: User })
     @ApiResponse({ status: 401, description: 'Ошибка авторизации' })
-    async login(@AuthUser() user: UserModel, @Body() signIn: SignIn, @Res() res: Response): Promise<Response<UserModel>> {
+    async signIn(@AuthUser() user: Omit<UserModel, 'password'>, @Body() signIn: SignIn, @Res() res: Response): Promise<Response<User>> {
         const token = this.authService.signToken(user)
 
         res.setHeader("Authorization", `Bearer ${token}`)

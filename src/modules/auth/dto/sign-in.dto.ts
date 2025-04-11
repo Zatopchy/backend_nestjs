@@ -1,7 +1,8 @@
 import { IsDefined, IsNotEmpty, IsEmail, MinLength } from "class-validator"
 import { ApiProperty } from "@nestjs/swagger"
+import { UserModel } from "@models"
 
-export class SignIn {
+export class SignIn implements Pick<UserModel, 'email' | 'password'> {
     @IsDefined()
     @IsEmail()
     @ApiProperty({ example: "hello@example.com", description: "Email пользователя", required: true })

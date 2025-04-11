@@ -3,7 +3,6 @@ import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { UserModel } from "@models"
 
-import { SignIn, SignUp } from "./dto"
 import { JwtPayload } from './types/jwt-payload';
 import { UsersService } from "../users/users.service"
 
@@ -14,7 +13,7 @@ export class AuthService {
         private jwtService: JwtService,
     ) { }
 
-    async register(signUp: SignUp): Promise<UserModel> {
+    async signUp(signUp: Pick<UserModel, 'email' | 'password'>): Promise<Omit<UserModel, 'password'>> {
         try {
             const isUserExists = await this.usersService.findOne(signUp.email)
             if (isUserExists) {
@@ -30,7 +29,7 @@ export class AuthService {
         }
     }
 
-    async login(signIn: SignIn): Promise<UserModel> {
+    async signIn(signIn: Pick<UserModel, 'email' | 'password'>): Promise<UserModel> {
         let user = await this.usersService.findOne(signIn.email)
 
         if (!user || !(await bcryptCompare(signIn.password, user.password))) {
@@ -40,7 +39,7 @@ export class AuthService {
         return user
     }
 
-    async verifyPayload(payload: JwtPayload): Promise<UserModel> {
+    async verifyPayload(payload: JwtPayload): Promise<Omit<UserModel, 'password'>> {
         let user: UserModel
 
         try {
@@ -53,13 +52,11 @@ export class AuthService {
         return user
     }
 
-    signToken(user: UserModel): string {
+    signToken(user: Pick<UserModel, 'email'>): string {
         try {
-            const payload = {
+            return this.jwtService.sign({
                 sub: user.email,
-            }
-
-            return this.jwtService.sign(payload)
+            })
         } catch (error) {
             throw error
         }

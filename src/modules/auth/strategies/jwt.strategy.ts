@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
         })
     }
 
-    validate(payload: JwtPayload): Promise<UserModel> {
+    validate(payload: JwtPayload): Promise<Omit<UserModel, 'password'>> {
         return this.authService.verifyPayload(payload)
     }
 }

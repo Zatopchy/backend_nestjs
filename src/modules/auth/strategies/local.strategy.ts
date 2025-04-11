@@ -20,6 +20,6 @@ export class LocalStrategy extends PassportStrategy(Strategy, "local") {
         signIn.password = password
         signIn.email = email
 
-        return this.authService.login(signIn)
+        return this.authService.signIn(signIn)
     }
 }

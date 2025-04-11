@@ -1,5 +1,6 @@
 import * as path from "path"
 import * as Joi from "joi"
+import { Algorithm } from "jsonwebtoken"
 import { ConfigModule, ConfigModuleOptions, ConfigService } from "@nestjs/config"
 import { JwtModuleAsyncOptions } from "@nestjs/jwt"
 import { TypeOrmModuleAsyncOptions } from "@nestjs/typeorm"
@@ -40,12 +41,12 @@ export const postgres: TypeOrmModuleAsyncOptions = {
 
 export const jwtConfig = {
     verifyOptions: {
-        algorithms: ["HS384"],
+        algorithms: ["HS384" as Algorithm],
     },
 
     signOptions: {
         expiresIn: "1y",
-        algorithm: "HS384",
+        algorithm: "HS384" as Algorithm,
     },
 }
 
@@ -57,5 +58,5 @@ export const jwtStrategy: JwtModuleAsyncOptions = {
         ({
             secret: configService.get("SESSION_SECRET"),
             ...jwtConfig,
-        } as any),
+        }),
 }

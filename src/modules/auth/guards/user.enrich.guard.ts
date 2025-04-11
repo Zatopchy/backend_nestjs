@@ -1,9 +1,19 @@
 import { Injectable, ExecutionContext, CanActivate, Inject } from "@nestjs/common"
 import { ExtractJwt } from "passport-jwt"
-import { verify } from "jsonwebtoken"
+import { verify, Algorithm } from "jsonwebtoken"
+import { Request as ExpressRequest } from "express"
 
 import { jwtConfig } from "@app.configs"
+import { UserModel } from "@models"
 import { AuthService } from "../auth.service"
+import { JwtPayload } from "../types/jwt-payload"
+
+interface RequestWithUser extends Request {
+    user?: Omit<UserModel, 'password'>;
+    signedCookies: {
+        token?: string;
+    };
+}
 
 @Injectable()
 export class UserOptionalEnrichGuard implements CanActivate {
@@ -11,8 +21,8 @@ export class UserOptionalEnrichGuard implements CanActivate {
         @Inject("AuthService") private readonly authService: AuthService,
     ) {}
 
-    getRequest<T = any>(context: ExecutionContext): T {
-        return context.switchToHttp().getRequest()
+    getRequest(context: ExecutionContext): RequestWithUser {
+        return context.switchToHttp().getRequest<RequestWithUser>()
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -33,9 +43,9 @@ export class UserOptionalEnrichGuard implements CanActivate {
     }
 }
 
-const getJwtPayload = (token: string) =>
-    new Promise<any>((resolve, reject) => {
-        verify(token, process.env.SESSION_SECRET, { algorithms: jwtConfig.verifyOptions.algorithms as any }, (error, payload) =>
-            error ? reject(error) : resolve(payload),
+const getJwtPayload = (token: string): Promise<JwtPayload> =>
+    new Promise((resolve, reject) => {
+        verify(token, process.env.SESSION_SECRET, { algorithms: jwtConfig.verifyOptions.algorithms as Algorithm[] }, (error, payload) =>
+            error ? reject(error) : resolve(payload as JwtPayload),
         )
     })

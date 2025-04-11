@@ -3,7 +3,6 @@ import { hash } from 'bcrypt';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserModel } from '../../models/user.entity';
-import { SignUp } from '../auth';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +11,7 @@ export class UsersService {
     private userRepository: Repository<UserModel>
   ) {}
 
-  async create(signUp: SignUp): Promise<UserModel> {
+  async create(signUp: Pick<UserModel, 'email' | 'password'>): Promise<UserModel> {
     if (!signUp.email || !signUp.password) {
       throw new BadRequestException('Email и пароль не могут быть пустыми');
     }
@@ -26,11 +25,11 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  async findOne(email: string): Promise<UserModel | null> {
+  async findOne(email: UserModel['email']): Promise<UserModel | null> {
     return this.userRepository.findOne({ where: { email } });
   }
 
-  async findAll(): Promise<UserModel[]> {
+  async findAll(): Promise<Pick<UserModel, 'uuid' | 'email'>[]> {
     return this.userRepository.find({
       select: ['uuid', 'email']
     });
